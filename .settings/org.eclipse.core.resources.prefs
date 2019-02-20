@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//flask_demo/cli.py=utf-8
+encoding//flask_demo/demo.py=utf-8
+encoding//flask_demo/demo/__about__.py=utf-8
+encoding//flask_demo/demo/config.py=utf-8
+encoding//flask_demo/demo/log.py=utf-8
+encoding//flask_demo/demo/manager.py=utf-8
+encoding//flask_demo/demo/views/simple/views.py=utf-8
+encoding//flask_demo/demo/views/sql/models.py=utf-8
+encoding//flask_demo/demo/views/sql/views.py=utf-8
+encoding//flask_demo/demo/views/views.py=utf-8
+encoding/setup.py=utf-8
