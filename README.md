@@ -20,7 +20,7 @@ python3 manager.py db upgrade
 C:\Redis-x64-3.0.504>redis-server redis.windows.conf
 
 # start celery service
-cd c:\flask-admin>celery worker -A job --loglevel info -c 1
+cd c:\flask_demo>celery worker -A job --loglevel info -c 1
 
 # for devlopment, serve with hot reload at localhost:5000
 python3 manager.py debug
