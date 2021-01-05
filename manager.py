@@ -1,19 +1,6 @@
 #! python3
 # -*- encoding: utf-8 -*-
-"""
-Rough version history:
-v1.0    Original version to use
 
-********************************************************************
-    @AUTHOR:  罗科峰
-    RCS:      manager.py,  v1.0 2018年11月22日
-    FROM:   2018年11月22日
-********************************************************************
-======================================================================
-
-Provide a function for the automation test
-
-"""
 import logging
 from multiprocessing import cpu_count
 
