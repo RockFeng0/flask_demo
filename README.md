@@ -87,13 +87,13 @@ python3 manager.py run
         "args": [3, 4], 
         "kwargs": {},
         "trigger": "date",
-        "run_date": "2020-12-30 22:01"
+        "run_date": "2021-01-05 23:05"
     }
-    # e.g. each 5 seconds to run, {"trigger": "cron", "second": "*/5"}
 
 * GET /scheduler/jobs/<job_id>
 * PATCH /scheduler/jobs/<job_id>
-    * json data, please see POST /scheduler/jobs
+    * json data, please see POST /scheduler/jobs, for example(each 5 seconds to run,):
+         {"trigger": "cron", "second": "*/5"}
 * DELETE /scheduler/jobs/<job_id>
     
 * POST /scheduler/jobs/<job_id>/pause
