@@ -1,15 +1,6 @@
 #! python3
 # -*- encoding: utf-8 -*-
-"""
-Rough version history:
-v1.0    Original version to use
-********************************************************************
-    @AUTHOR:  罗科峰
-    RCS:      gunicorn.py,  v1.0 2020/12/2
-    FROM:     2020/12/2
-********************************************************************
 
-"""
 from abc import ABC
 
 from gunicorn.six import iteritems
