@@ -10,7 +10,7 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 APP_ENV = 'testing'
 # APP_ENV = 'production'
 
-# 设置根路径(e.g. /opt/deploy/flask-admin, c:\flask-admin)
+# 设置根路径(e.g. /opt/deploy/flask_demo, c:\flask_demo)
 ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -64,7 +64,7 @@ class ProdConfig(Config):
     PASSWORD = "password"
     HOST = "xxx.xxx.xxx.xxx"
     PORT = 3306
-    DATABASE = 'flask_admin'
+    DATABASE = 'flask_demo'
 
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{0}:{1}@{2}:{3}/{4}?charset=utf8'. \
         format(USERNAME, PASSWORD, HOST, PORT, DATABASE)
@@ -89,7 +89,7 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     DEBUG = True
-    _sqlite_db_path = os.path.join(ROOT_PATH, "flask_admin.db")
+    _sqlite_db_path = os.path.join(ROOT_PATH, "flask_demo.db")
     SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(_sqlite_db_path)
 
     # flask-apscheduler 存储的位置,用于定时任务的持久化
@@ -102,7 +102,7 @@ class DevConfig(Config):
     # PASSWORD = "password"
     # HOST = "xxx.xxx.xxx.xxx"
     # PORT = 3306
-    # DATABASE = 'flask_admin_demo'
+    # DATABASE = 'flask_demo'
     #
     # SQLALCHEMY_BINDS = {
     #     'auto': 'mysql+pymysql://{0}:{1}@{2}:{3}/{4}?charset=utf8mb4'.format(USERNAME, PASSWORD, HOST, PORT, DATABASE),
