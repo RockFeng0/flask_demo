@@ -6,19 +6,19 @@ from abc import ABC
 
 from gunicorn.six import iteritems
 from gunicorn.app.base import BaseApplication
-from app.config import ROOT_PATH
+from app.utils.log import server_log, error_log
 
 
 class GunicornConfig(object):
     # gunicorn配置
-    BIND = '127.0.0.1:5000'
+    BIND = '0.0.0.0:5000'
     WORKERS = multiprocessing.cpu_count() * 2 + 1
     WORKER_CONNECTIONS = 10000
     BACKLOG = 64
     TIMEOUT = 60
     LOGLEVEL = 'INFO'
-    ACCESSLOG = os.path.join(ROOT_PATH, 'logs', 'gunicorn_acess.log')
-    ERRORLOG = os.path.join(ROOT_PATH, 'logs', 'gunicorn_error.log')
+    ACCESSLOG = server_log
+    ERRORLOG = error_log
     PID_FILE = 'run.pid'
 
 
