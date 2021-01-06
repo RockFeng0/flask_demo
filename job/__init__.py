@@ -41,6 +41,6 @@ from job.config import configs
 #         if not '' in sys.path:
 #             sys.path.insert(0, "")
 
-celery = Celery("flask_admin")
+celery = Celery("flask_demo")
 celery.config_from_object(configs[APP_ENV])
 sys.path.insert(0, "") if '' not in sys.path else None
