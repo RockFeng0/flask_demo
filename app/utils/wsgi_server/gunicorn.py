@@ -33,7 +33,7 @@ class StandaloneApplication(BaseApplication, ABC):
         self.options = {}
         for key in dir(GunicornConfig):
             if key.isupper():
-                self.options[key] = getattr(GunicornConfig, key)
+                self.options[key.lower()] = getattr(GunicornConfig, key)
 
         super(StandaloneApplication, self).__init__()
 
