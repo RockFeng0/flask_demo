@@ -19,7 +19,7 @@ class GunicornConfig(object):
     LOGLEVEL = 'INFO'
     ACCESSLOG = server_log
     ERRORLOG = error_log
-    PID_FILE = 'run.pid'
+    PIDFILE = 'run.pid'
 
 
 class StandaloneApplication(BaseApplication, ABC):
