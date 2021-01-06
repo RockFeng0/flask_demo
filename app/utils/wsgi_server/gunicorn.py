@@ -16,10 +16,9 @@ class GunicornConfig(object):
     WORKER_CONNECTIONS = 10000
     BACKLOG = 64
     TIMEOUT = 60
-    LOG_LEVEL = 'INFO'
-    LOG_DIR_PATH = os.path.join(ROOT_PATH, 'logs')
-    LOG_FILE_MAX_BYTES = 1024 * 1024 * 100
-    LOG_FILE_BACKUP_COUNT = 10
+    LOGLEVEL = 'INFO'
+    ACCESSLOG = os.path.join(ROOT_PATH, 'logs', 'gunicorn_acess.log')
+    ERRORLOG = os.path.join(ROOT_PATH, 'logs', 'gunicorn_error.log')
     PID_FILE = 'run.pid'
 
 
