@@ -10,17 +10,17 @@ from app.config import ROOT_PATH
 
 
 class GunicornConfig(object):
-    """ gunicorn配置(Linux生产环境支持gunicorn) """
-    bind = '127.0.0.1:5000'
-    workers = multiprocessing.cpu_count() * 2 + 1
-    worker_connections = 10000
-    timeout = 60
-    log_level = 'INFO'
-    log_dir_path = os.path.join(ROOT_PATH, 'logs')
-    log_file_max_bytes = 1024 * 1024 * 100
-    log_file_backup_count = 10
-    backlog = 64
-    pid_file = 'run.pid'
+    # gunicorn配置
+    BIND = '127.0.0.1:5000'
+    WORKERS = multiprocessing.cpu_count() * 2 + 1
+    WORKER_CONNECTIONS = 10000
+    BACKLOG = 64
+    TIMEOUT = 60
+    LOG_LEVEL = 'INFO'
+    LOG_DIR_PATH = os.path.join(ROOT_PATH, 'logs')
+    LOG_FILE_MAX_BYTES = 1024 * 1024 * 100
+    LOG_FILE_BACKUP_COUNT = 10
+    PID_FILE = 'run.pid'
 
 
 class StandaloneApplication(BaseApplication, ABC):
@@ -28,9 +28,13 @@ class StandaloneApplication(BaseApplication, ABC):
     gunicorn服务器启动类
     """
 
-    def __init__(self, application, options):
+    def __init__(self, application):
         self.application = application
-        self.options = options or {}
+        self.options = {}
+        for key in dir(GunicornConfig):
+            if key.isupper():
+                self.options[key] = getattr(GunicornConfig, key)
+
         super(StandaloneApplication, self).__init__()
 
     def load_config(self):
