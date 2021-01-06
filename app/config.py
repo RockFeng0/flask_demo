@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 
 import os
-import multiprocessing
 
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
@@ -73,18 +72,6 @@ class ProdConfig(Config):
     SCHEDULER_JOBSTORES = {
         'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
     }
-
-    # gunicorn配置
-    BIND = '127.0.0.1:5000'
-    WORKERS = multiprocessing.cpu_count() * 2 + 1
-    WORKER_CONNECTIONS = 10000
-    BACKLOG = 64
-    TIMEOUT = 60
-    LOG_LEVEL = 'INFO'
-    LOG_DIR_PATH = os.path.join(ROOT_PATH, 'logs')
-    LOG_FILE_MAX_BYTES = 1024 * 1024 * 100
-    LOG_FILE_BACKUP_COUNT = 10
-    PID_FILE = 'run.pid'
 
 
 class DevConfig(Config):
