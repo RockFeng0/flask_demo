@@ -12,9 +12,9 @@ from flask_apscheduler import APScheduler
 
 # from flask_login import LoginManager
 # from flask_bcrypt import Bcrypt
-from werkzeug.contrib.cache import SimpleCache
 
-from app.utils import log
+from utils import log
+from app import pretty
 from app.config import APP_ENV, configs
 
 # 获取日志对象
@@ -71,30 +71,29 @@ def create_app():
         if blue_print_attr.get("is_off"):
             continue
 
-        # 待注册的蓝图名字
-        name = blue_print_attr.get("name") if blue_print_attr.get("name") else suffix_endpoint.split('.')[-1]
-
         # noinspection PyBroadException
         try:
             # 生成url前缀
             _end_point = "{0}.{1}".format(prefix_endpoint, suffix_endpoint)
             obj = importlib.import_module(_end_point)
 
-            def __get_url_prefix():
-                p = re.compile('(api)_([0-9]+)_([0-9]+)')
-                f = lambda x: p.match(x)
-                _end_point_list = _end_point.split('.')
-                _url_prefix_list = _end_point_list[_end_point_list.index(list(filter(f, _end_point_list))[0]):] \
-                    if list(filter(f, _end_point_list)) else []
-                return p.sub('/\g<1>/v\g<2>.\g<3>', '/'.join(_url_prefix_list))
+            # 定义蓝图名称
+            name = blue_print_attr.get("name") if blue_print_attr.get("name") else suffix_endpoint.split('.')[-1]
 
-            # 注册蓝图并映射到endpoint, 默认使用自定义的蓝图，如果是不是自定义的蓝图，那么就会使用生成的蓝图
-            url_pre = blue_print_attr.get("url_prefix") if blue_print_attr.get("url_prefix") else __get_url_prefix()
+            if blue_print_attr.get("url_prefix"):
+                # 自定义的蓝图 url
+                url_pre = blue_print_attr.get("url_prefix")
+            else:
+                # 生成的蓝图 url
+                url_pre = pretty.get_url_prefix(_end_point)
+
+            # 注册蓝图并映射到endpoint
             app.register_blueprint(getattr(obj, name), url_prefix='{}'.format(url_pre))
         except Exception:
             logger.error(u'**** {0}\t module[{1}]'.format('fail', suffix_endpoint), exc_info=True)
         else:
             logger.info(u'**** {0}\t module[{1}]'.format('pass', suffix_endpoint))
+    # print(app.url_map)
     return app
 
 # APP = create_app()

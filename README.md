@@ -32,20 +32,19 @@ python3 manager.py run
 
 # Folder structure
 * app - your back-end app of flask
-    * com - your app common file 
-    * src - source code
-        * models - sqlalchemy models
-        * resources - your restful api resources
-        * routes
-    * utils
-    * config.py - your app configurations
-    * views.py
-* job - celery work
+    * models - sqlalchemy models
+    * resources - your restful api resources
+    * views - your blueprints and apis    
+    * config.py - your flask app configurations
+    * code.py - http response code
+    * pretty.py
+* job - asynchronous tasks and schedule tasks  (celery + redis + aspschedule)
     * celery_tasks -your app celery tasks
     * schedule_funcs -your app apschedule jobs
     * config.py - your job configurations
-* thd -third extensions
-    * gunnicorn.py
+* utils - utils or extensions
+    * email - to do
+    * wsgi_server - gunnicorn command line
 * manager.py
 
 # Demo API

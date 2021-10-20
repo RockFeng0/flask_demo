@@ -43,12 +43,12 @@ class Config(object):
     SCHEDULER_API_ENABLED = True
 
     # 蓝图映射endpoint的前缀
-    PREFIX_ENDPOINT = "app.src.routes"
+    PREFIX_ENDPOINT = "app.views"
 
     # 蓝图开关
     ALL_BLUE_PRINT = {
-        "api_0_0.rm_task": {"is_off": True, "url_prefix": "/rm_task"},
-        "views.celery_api": {"is_off": False, "url_prefix": "/task", "name": "task"},
+        "index": {"is_off": False, "url_prefix": "/"},
+        "celery_demo": {"is_off": False, "url_prefix": "/task", "name": "task"},
         "api_1_0.organization": {"is_off": False},
     }
 

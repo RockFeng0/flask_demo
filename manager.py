@@ -2,16 +2,13 @@
 # -*- encoding: utf-8 -*-
 
 import logging
-from multiprocessing import cpu_count
 
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from app import create_app, db
-from app.views import index
 
 APP = create_app()
-APP.add_url_rule('/', endpoint='index', view_func=index, methods=["GET"])
 
 migrate = Migrate(APP, db)
 
@@ -25,7 +22,7 @@ def run():
     生产模式启动命令函数
     To use: python3 manager.py run
     """
-    from app.utils.wsgi_server.gunicorn import StandaloneApplication
+    from utils import StandaloneApplication
 
     # APP.logger.setLevel(APP.config.get('LOG_LEVEL', logging.INFO))
     # service_config = {

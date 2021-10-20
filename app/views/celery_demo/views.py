@@ -2,12 +2,11 @@
 # -*- encoding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from flask import Blueprint, jsonify, request
-from app.com import code
-from app.com.pretty import pretty_result
+from flask import jsonify, request
+from app import code
+from app.pretty import pretty_result
+from app.views.celery_demo import task
 from job.celery_tasks import demo
-
-task = Blueprint('task', __name__)
 
 
 @task.route('/run', methods=['GET'])
