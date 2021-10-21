@@ -1,10 +1,9 @@
 #! python3
 # -*- encoding: utf-8 -*-
 
-import re
-import logging
+import os
 import importlib
-
+from loguru import logger
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -13,17 +12,8 @@ from flask_apscheduler import APScheduler
 # from flask_login import LoginManager
 # from flask_bcrypt import Bcrypt
 
-from utils import log
 from app import pretty
-from app.config import APP_ENV, configs
-
-# 获取日志对象
-logger = logging.getLogger(__name__)
-logger.addHandler(log.console)
-logger.addHandler(log.log_handler)
-logger.addHandler(log.err_handler)
-logger.setLevel(logging.DEBUG)
-
+from app.config import ROOT_PATH, APP_ENV, configs
 
 # 创建跨域对象： 解决跨域问题
 cors = CORS()
@@ -44,6 +34,23 @@ scheduler = APScheduler()
 # simple_cache = SimpleCache()
 
 
+def _init_log():
+    """
+    配置日志对象
+    """
+    logs_path = os.path.join(ROOT_PATH, 'logs')
+
+    if not os.path.exists(logs_path):
+        os.mkdir(logs_path)
+
+    server_log = os.path.join(logs_path, "server_{time:YYYY-MM-DD}.log")
+    error_log = os.path.join(logs_path, "error_{time:YYYY-MM-DD}.log")
+
+    server_sink = logger.add(sink=server_log, level="DEBUG", rotation="1 day")
+    error_sink = logger.add(sink=error_log, level="ERROR", rotation="1 day")
+    return server_sink, error_sink
+
+
 def create_app():
     """
     创建app
@@ -53,6 +60,9 @@ def create_app():
 
     # 将配置读取到flask对象中
     app.config.from_object(configuration)
+
+    # 初始化日志对象
+    _init_log()
 
     # 对象的初始化
     configuration.init_app(app)
