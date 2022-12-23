@@ -2,7 +2,13 @@
 # -*- encoding: utf-8 -*-
 
 import os
-
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_bcrypt import Bcrypt
+from werkzeug.contrib.cache import SimpleCache
+from flask_migrate import Migrate
+from flask_apscheduler import APScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
 # 配置使用的环境， 测试环境或生产环境
@@ -11,6 +17,27 @@ APP_ENV = 'testing'
 
 # 设置根路径(e.g. /opt/deploy/flask_demo, c:\flask_demo)
 ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
+
+# 创建跨域对象： 解决跨域问题
+cors = CORS()
+
+# 创建数据库对象： 处理数据库对象关系映射
+db = SQLAlchemy()
+
+# 创建登录管理对象： 处理用户登录
+login_manager = LoginManager()
+
+# 创建加密对象： 处理用户登录密码
+bcrypt = Bcrypt()
+
+# 创建一个缓存对象
+simple_cache = SimpleCache()
+
+# 创建一个数据库迁移对象
+migrate = Migrate()
+
+# 创建计划任务对象： 处理定时任务
+scheduler = APScheduler()
 
 
 class Config(object):
@@ -47,14 +74,20 @@ class Config(object):
 
     # 蓝图开关
     ALL_BLUE_PRINT = {
-        "api_0_0.rm_task": {"is_off": True, "url_prefix": "/rm_task"},
+        "api.user": {"is_off": False},
+        "api.api_1_0.organization": {"is_off": False},
         "views.celery_api": {"is_off": False, "url_prefix": "/task", "name": "task"},
-        "api_1_0.organization": {"is_off": False},
     }
 
     @staticmethod
     def init_app(app):
-        pass
+        cors.init_app(app, supports_credentials=True)
+        db.init_app(app)
+        login_manager.init_app(app)
+        bcrypt.init_app(app)
+        migrate.init_app(app, db)
+        scheduler.init_app(app)
+        scheduler.start()
 
 
 class ProdConfig(Config):
@@ -69,9 +102,9 @@ class ProdConfig(Config):
         format(USERNAME, PASSWORD, HOST, PORT, DATABASE)
 
     # flask-apscheduler 存储的位置,用于定时任务的持久化
-    SCHEDULER_JOBSTORES = {
-        'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
-    }
+    # SCHEDULER_JOBSTORES = {
+    #     'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+    # }
 
 
 class DevConfig(Config):

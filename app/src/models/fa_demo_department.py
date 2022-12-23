@@ -1,7 +1,7 @@
 #! python3
 # -*- encoding: utf-8 -*-
 
-from app import db
+from app.config import db
 from .base import BaseModel
 
 

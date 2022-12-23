@@ -1,47 +1,30 @@
 #! python3
 # -*- encoding: utf-8 -*-
 
-import re
-import logging
+import os
 import importlib
+from loguru import logger
 
 from flask import Flask
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_apscheduler import APScheduler
-
-# from flask_login import LoginManager
-# from flask_bcrypt import Bcrypt
-from werkzeug.contrib.cache import SimpleCache
-
-from app.utils import log
-from app.config import APP_ENV, configs
-
-# 获取日志对象
-logger = logging.getLogger(__name__)
-logger.addHandler(log.console)
-logger.addHandler(log.log_handler)
-logger.addHandler(log.err_handler)
-logger.setLevel(logging.DEBUG)
+from app.com import pretty
+from app.config import APP_ENV, ROOT_PATH, configs
 
 
-# 创建跨域对象： 解决跨域问题
-cors = CORS()
+def _init_log():
+    """
+    配置日志对象
+    """
+    logs_path = os.path.join(ROOT_PATH, 'logs')
 
-# 创建数据库对象： 处理数据库对象关系映射
-db = SQLAlchemy()
+    if not os.path.exists(logs_path):
+        os.mkdir(logs_path)
 
-# 创建计划任务对象： 处理定时任务
-scheduler = APScheduler()
+    server_log = os.path.join(logs_path, "server_{time:YYYY-MM-DD}.log")
+    error_log = os.path.join(logs_path, "error_{time:YYYY-MM-DD}.log")
 
-# 创建登录管理对象： 处理用户登录
-# login_manager = LoginManager()
-
-# 创建加密对象： 处理用户登录密码
-# bcrypt = Bcrypt()
-
-# 创建一个缓存对象
-# simple_cache = SimpleCache()
+    server_sink = logger.add(sink=server_log, level="DEBUG", rotation="1 day")
+    error_sink = logger.add(sink=error_log, level="ERROR", rotation="1 day")
+    return server_sink, error_sink
 
 
 def create_app():
@@ -54,14 +37,11 @@ def create_app():
     # 将配置读取到flask对象中
     app.config.from_object(configuration)
 
+    # 初始化日志
+    _init_log()
+
     # 对象的初始化
     configuration.init_app(app)
-    db.init_app(app)
-    cors.init_app(app, supports_credentials=True)
-    scheduler.init_app(app)
-    scheduler.start()
-    # login_manager.init_app(app)
-    # bcrypt.init_app(app)
 
     # 处理蓝图
     blue_prints = app.config.get("ALL_BLUE_PRINT")
@@ -71,28 +51,26 @@ def create_app():
         if blue_print_attr.get("is_off"):
             continue
 
-        # 待注册的蓝图名字
-        name = blue_print_attr.get("name") if blue_print_attr.get("name") else suffix_endpoint.split('.')[-1]
-
         # noinspection PyBroadException
         try:
             # 生成url前缀
             _end_point = "{0}.{1}".format(prefix_endpoint, suffix_endpoint)
             obj = importlib.import_module(_end_point)
 
-            def __get_url_prefix():
-                p = re.compile('(api)_([0-9]+)_([0-9]+)')
-                f = lambda x: p.match(x)
-                _end_point_list = _end_point.split('.')
-                _url_prefix_list = _end_point_list[_end_point_list.index(list(filter(f, _end_point_list))[0]):] \
-                    if list(filter(f, _end_point_list)) else []
-                return p.sub('/\g<1>/v\g<2>.\g<3>', '/'.join(_url_prefix_list))
+            if blue_print_attr.get("name") and blue_print_attr.get("url_prefix"):
+                # 自定义的蓝图
+                name = blue_print_attr.get("name")
+                url_pre = blue_print_attr.get("url_prefix")
+            else:
+                # 生成的蓝图
+                name = suffix_endpoint.split('.')[-1]
+                url_pre = pretty.get_url_prefix(_end_point)
 
-            # 注册蓝图并映射到endpoint, 默认使用自定义的蓝图，如果是不是自定义的蓝图，那么就会使用生成的蓝图
-            url_pre = blue_print_attr.get("url_prefix") if blue_print_attr.get("url_prefix") else __get_url_prefix()
+            # 注册蓝图并映射到endpoint
             app.register_blueprint(getattr(obj, name), url_prefix='{}'.format(url_pre))
-        except Exception:
-            logger.error(u'**** {0}\t module[{1}]'.format('fail', suffix_endpoint), exc_info=True)
+        except Exception as e:
+            logger.error(u'**** {0}\t module[{1}]'.format('fail', suffix_endpoint))
+            # logger.exception("error?")  # 打印堆栈信息
         else:
             logger.info(u'**** {0}\t module[{1}]'.format('pass', suffix_endpoint))
     return app

@@ -6,7 +6,6 @@ from abc import ABC
 
 from gunicorn.six import iteritems
 from gunicorn.app.base import BaseApplication
-from app.utils.log import server_log, error_log
 
 
 class GunicornConfig(object):
@@ -17,9 +16,9 @@ class GunicornConfig(object):
     BACKLOG = 64
     TIMEOUT = 60
     LOGLEVEL = 'INFO'
-    ACCESSLOG = server_log
-    ERRORLOG = error_log
-    PIDFILE = 'run.pid'
+    ACCESSLOG = '/dev/null'
+    ERRORLOG = './logs/gunicorn.log'
+    PIDFILE = 'flask-demo.pid'
 
 
 class StandaloneApplication(BaseApplication, ABC):

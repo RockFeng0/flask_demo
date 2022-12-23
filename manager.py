@@ -2,19 +2,15 @@
 # -*- encoding: utf-8 -*-
 
 import logging
-from multiprocessing import cpu_count
+# from multiprocessing import cpu_count
 
 from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
-
-from app import create_app, db
+from flask_migrate import MigrateCommand
+from app import create_app
 from app.views import index
 
 APP = create_app()
 APP.add_url_rule('/', endpoint='index', view_func=index, methods=["GET"])
-
-migrate = Migrate(APP, db)
-
 manager = Manager(APP)
 manager.add_command('db', MigrateCommand)
 

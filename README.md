@@ -12,9 +12,9 @@ pip install -r requirements.txt
 # pip install celery==3.1.25 
 
 # init database
-python3 manager.py db init
-python3 manager.py db migrate
-python3 manager.py db upgrade
+python3 manager.py db init -d migrations_test
+python3 manager.py db migrate -d migrations_test
+python3 manager.py db upgrade -d migrations_test
 
 # start redis service with redis.windows.conf which is setted 'requirepass 123456'
 C:\Redis-x64-3.0.504>redis-server redis.windows.conf
@@ -37,15 +37,14 @@ python3 manager.py run
         * models - sqlalchemy models
         * resources - your restful api resources
         * routes
-    * utils
+    * utils        
+        * wsgi_server - gunicorn
     * config.py - your app configurations
     * views.py
 * job - celery work
     * celery_tasks -your app celery tasks
     * schedule_funcs -your app apschedule jobs
     * config.py - your job configurations
-* thd -third extensions
-    * gunnicorn.py
 * manager.py
 
 # Demo API
@@ -104,8 +103,23 @@ python3 manager.py run
     * json data: {}
  
 ```
- 
 
+> User Auth
+```
+* POST /user/register
+    * 用户注册,邮箱和手机号码是唯一的
+    * {"email": "test@1234.com", "mobile_number": "13512341234", "username": "test", "password": "123456", "about_me": "测试注册功能"}
+* POST /user/login
+    * 邮箱或手机号登录
+    * {"email_or_mobile_number": "test","password": "123456", "remember": false}
+* POST /user/updater/1
+    * 用户信息修改, 邮箱和手机号码是唯一的, 密码不能修改
+    * {"email": "test@1234.com", "mobile_number": "13512341234", "username": "test", "about_me": "测试注册功能"}
+    * {"mobile_number": "13512345678", "username": "test", "about_me": "测试注册功能"}
+* GET /user/test
+    * 鉴权测试
+* GET /user/logout
+```
 
 
 # License

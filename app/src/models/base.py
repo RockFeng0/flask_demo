@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 import datetime
-from app import db
+from app.config import db
 
 
 class BaseModel(object):
