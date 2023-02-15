@@ -16,5 +16,5 @@ loguru>=0.4.1
 # for windows you need  celery==3.1.25 and redis==2.10.6
 celery==4.4.6
 redis==3.5.3
-werkzeug==0.16.0
+werkzeug==2.2.3
 
