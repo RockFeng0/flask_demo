@@ -4,29 +4,32 @@
 This is a project template for [flask-restful](https://github.com/flask-restful/flask-restful) with blueprint
 
 ```bash
-# install dependencies
+# 1. install dependencies
 pip install -r requirements.txt
 
-# for windows, you need install below version 
+# 2. for windows, you need install below version 
 # pip install redis==2.10.6
 # pip install celery==3.1.25 
 
-# init database
-python3 manager.py db init -d migrations_test
-python3 manager.py db migrate -d migrations_test
-python3 manager.py db upgrade -d migrations_test
+# 3. set environment 
+c:\flask_demo>set FLASK_APP=manager.py
 
-# start redis service with redis.windows.conf which is setted 'requirepass 123456'
+# 4.init database
+c:\flask_demo>flask db init -d migrations_test
+c:\flask_demo>flask db migrate -d migrations_test
+c:\flask_demo>flask db upgrade -d migrations_test
+
+# 5. start redis service with redis.windows.conf which is setted 'requirepass 123456'
 C:\Redis-x64-3.0.504>redis-server redis.windows.conf
 
-# start celery service
-cd c:\flask_demo>celery worker -A job --loglevel info -c 1
+# 6. start celery service
+c:\flask_demo>celery -A job worker --loglevel info -c 1 -P eventlet
 
-# for devlopment, serve with hot reload at localhost:5000
-python3 manager.py debug
+# 7. for devlopment, serve with hot reload at localhost:5000
+c:\flask_demo>flask run --port 5000 --debug
 
-# for production
-python3 manager.py run
+# 8. for production, linux, run the command
+# flask serve
 
 ```
 
