@@ -6,7 +6,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from werkzeug.contrib.cache import SimpleCache
+from flask_caching import Cache
 from flask_migrate import Migrate
 from flask_apscheduler import APScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
@@ -31,7 +31,7 @@ login_manager = LoginManager()
 bcrypt = Bcrypt()
 
 # 创建一个缓存对象
-simple_cache = SimpleCache()
+simple_cache = Cache()
 
 # 创建一个数据库迁移对象
 migrate = Migrate()
@@ -49,25 +49,23 @@ class Config(object):
     TOKEN_LIFETIME = 3600
     REMEMBER_COOKIE_NAME = "token"
 
-    # flask-sqlalchemy 数据库 - 请求执行完逻辑之后自动提交，而不用我们每次都手动调用session.commit(); 我还是习惯，自己 commit
-    SQLALCHEMY_COMMIT_ON_TEARDOWN = False
+    # flask-sqlalchemy 数据库
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = False  # 请求执行完逻辑之后自动提交，而不用我们每次都手动调用session.commit(); 我还是习惯，自己 commit
+    SQLALCHEMY_TRACK_MODIFICATIONS = False  # 需要设定参数True 或者 Flase,是说SQLALCHEMY_TRACK_MODIFICATIONS不能默认什么都没有
 
-    # flask-sqlalchemy 数据库 - 需要设定参数True 或者 Flase,是说SQLALCHEMY_TRACK_MODIFICATIONS不能默认什么都没有
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    # flask-apscheduler  线程池配置
-    SCHEDULER_EXECUTORS = {
+    # flask-apscheduler
+    SCHEDULER_EXECUTORS = { # 线程池配置
         'default': {'type': 'threadpool', 'max_workers': 20}
     }
-
-    # flask-apscheduler 预设任务配置
-    SCHEDULER_JOB_DEFAULTS = {
+    SCHEDULER_JOB_DEFAULTS = { # 预设任务配置
         'coalesce': False,
         'max_instances': 3
     }
+    SCHEDULER_API_ENABLED = True  # 启用apscheduler api的开关
 
-    # flask-apscheduler 启用apscheduler api的开关
-    SCHEDULER_API_ENABLED = True
+    # flask-caching
+    CACHE_TYPE = 'SimpleCache'  # 使用简单内存缓存。 Flask-Caching支持多种缓存类型，具体参见官网
+    CACHE_DEFAULT_TIMEOUT = 300  # 默认缓存超时时间（秒）
 
     # 蓝图映射endpoint的前缀
     PREFIX_ENDPOINT = "app.src.routes"
@@ -85,6 +83,7 @@ class Config(object):
         db.init_app(app)
         login_manager.init_app(app)
         bcrypt.init_app(app)
+        simple_cache.init_app(app)
         migrate.init_app(app, db)
         scheduler.init_app(app)
         scheduler.start()
