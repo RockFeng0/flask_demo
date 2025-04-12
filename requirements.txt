@@ -1,20 +1,33 @@
-Flask==1.1.2
-Flask-Cors==3.0.9
-Flask-SQLAlchemy==2.4.4
-Flask-Migrate==2.5.3
-Flask-RESTful==0.3.8
-Flask-APScheduler==1.11.0
-Flask-Script==2.0.6
-Flask-Login==0.5.0
-Flask-Bcrypt==0.7.1
-PyMySQL==0.10.1
-gevent==20.12.1
-greenlet==0.4.17
-gunicorn==19.9.0
-loguru>=0.4.1
+# python 3.9
+Flask>=3.1.0
+Flask-Cors>=3.0.10
+Flask-RESTful>=0.3.9
 
-# for windows you need  celery==3.1.25 and redis==2.10.6
-celery==4.4.6
-redis==3.5.3
-werkzeug==0.16.0
+# 调度任务
+Flask-APScheduler>=1.12.4
+
+# ORM（对象关系映射）和数据库迁移
+Flask-SQLAlchemy>=3.1.1
+Flask-Migrate>=4.1.0
+
+# 用户登录 、 加密、 缓存
+Flask-Login>=0.6.3
+Flask-Bcrypt>=1.0.1
+Flask-Caching>=2.0.1
+
+# mysql库、日志
+pymysql>=1.0.2
+loguru>=0.7.2
+gevent>=23.9.1
+
+# for windows
+# python2.7 版本锁定 => celery==3.1.25 and redis==2.10.6
+celery==5.5.1  # python 3.9 版本锁定
+vine==5.1.0  # python 3.9 版本锁定
+eventlet==0.39.1  # python 3.9 版本锁定
+
+# for linux wsgi server only
+# gunicorn>=19.9.0
+# celery==4.4.6
+# redis==3.5.3
 
