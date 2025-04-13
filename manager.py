@@ -17,7 +17,7 @@ def serve():
     生产模式启动命令函数
     To use: flask serve
     """
-    from app.utils.wsgi_server.gunicorn import StandaloneApplication
+    from utils.wsgi_server.gunicorn import StandaloneApplication
 
     # APP.logger.setLevel(APP.config.get('LOG_LEVEL', logging.INFO))
     # service_config = {

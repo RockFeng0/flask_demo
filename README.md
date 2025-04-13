@@ -23,7 +23,7 @@ c:\flask_demo>flask db upgrade -d migrations_test
 C:\Redis-x64-3.0.504>redis-server redis.windows.conf
 
 # 6. start celery service
-c:\flask_demo>celery -A job worker --loglevel info -c 1 -P eventlet
+c:\flask_demo>celery -A app.celery_demo worker --loglevel info -c 1 -P eventlet
 
 # 7. for devlopment, serve with hot reload at localhost:5000
 c:\flask_demo>flask run --port 5000 --debug
@@ -85,7 +85,7 @@ c:\flask_demo>flask run --port 5000 --debug
     * json data: 
     {
         "id": "schedule_task_1", 
-        "func": "job.schedule_funcs.demo_func:add_task", 
+        "func": "app.celery_demo.services.schedule_demo_task:add_task",  
         "args": [3, 4], 
         "kwargs": {},
         "trigger": "date",

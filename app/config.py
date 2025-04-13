@@ -68,14 +68,28 @@ class Config(object):
     CACHE_DEFAULT_TIMEOUT = 300  # 默认缓存超时时间（秒）
 
     # 蓝图映射endpoint的前缀
-    PREFIX_ENDPOINT = "app.src.routes"
+    PREFIX_ENDPOINT = "app"
 
     # 蓝图开关
-    ALL_BLUE_PRINT = {
-        "api.user": {"is_off": False},
-        "api.api_1_0.organization": {"is_off": False},
-        "views.celery_api": {"is_off": False, "url_prefix": "/task", "name": "task"},
-    }
+    # ALL_BLUE_PRINT = {
+    #     "api.user": {"is_off": False},
+    #     "api.api_1_0.organization": {"is_off": False},
+    #     "views.celery_api": {"is_off": False, "url_prefix": "/task", "name": "task"},
+    # }
+    ALL_BLUE_PRINT = [
+        {
+            "app_module": "auth_demo",
+            "attrs":{"is_off": False}
+        },
+        {
+            "app_module": "organization_demo",
+            "attrs":{"is_off": False}
+        },
+        {
+            "app_module": "celery_demo",
+            "attrs":{"is_off": False, "url_prefix": "/task", "name": "task"}
+        },
+    ]
 
     @staticmethod
     def init_app(app):

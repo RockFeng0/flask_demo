@@ -1,7 +1,6 @@
 #! python3
 # -*- encoding: utf-8 -*-
 
-
 class Config(object):
     CELERY_TIMEZONE = 'Asia/Shanghai'
 
@@ -15,7 +14,8 @@ class Config(object):
     CELERYD_MAX_TASKS_PER_CHILD = 100
 
     CELERY_IMPORTS = (
-        "job.celery_tasks.demo",
+        # "job.celery_tasks.demo",
+        "app.celery_demo.services.celery_demo_task"
     )
 
 

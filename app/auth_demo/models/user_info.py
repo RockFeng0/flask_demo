@@ -6,7 +6,7 @@ from flask import current_app
 from flask_login import UserMixin
 from itsdangerous import URLSafeSerializer
 from app.config import db, bcrypt
-from app.src.models.base import BaseModel
+from app.auth_demo.models.base import BaseModel
 
 ROLE_USER = 0
 ROLE_ADMIN = 1

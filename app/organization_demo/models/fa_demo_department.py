@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from app.config import db
-from .base import BaseModel
+from app.organization_demo.models.base import BaseModel
 
 
 class DepartmentModel(db.Model, BaseModel):

@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 import re
-from app.com.code import CODE_MSG_MAP
+from com.code import CODE_MSG_MAP
 
 
 def pretty_result(code, msg=None, data=None):

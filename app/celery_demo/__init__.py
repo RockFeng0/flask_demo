@@ -1,12 +1,12 @@
 #! python3
 # -*- encoding: utf-8 -*-
 
-
 import sys
 from celery import Celery
 
 from app.config import APP_ENV
-from job.config import configs
+from app.celery_demo.conf import configs
+
 
 # 备忘注释
 # class FactoryCelery(Celery):

@@ -8,9 +8,9 @@ from flask_restful.reqparse import RequestParser
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import db
-from app.com import code
-from app.com.pretty import pretty_result
-from app.src.models.fa_demo_department import DepartmentModel
+from com import code
+from com.pretty import pretty_result
+from app.organization_demo.models.fa_demo_department import DepartmentModel
 
 
 class DepartmentListView(Resource):

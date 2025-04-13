@@ -1,14 +1,15 @@
 #! python3
 # -*- encoding: utf-8 -*-
 
-
 from flask import Blueprint
 from flask_restful import Api
-from app.src.resources.department import DepartmentListView, DepartmentView
-from app.src.resources.staff import StaffListView, StaffView
+from app.organization_demo.services.department import DepartmentListView, DepartmentView
+from app.organization_demo.services.staff import StaffListView, StaffView
 
-organization = Blueprint('organization', __name__)
-api = Api(organization)
+
+bp = Blueprint(name='organization', import_name=__name__, url_prefix="/api/v1.0/organization")
+
+api = Api(bp)
 api.add_resource(DepartmentListView, '/department')
 api.add_resource(DepartmentView, '/department/<int:id>')
 api.add_resource(StaffListView, '/staff')

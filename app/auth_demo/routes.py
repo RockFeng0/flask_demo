@@ -10,13 +10,13 @@ from flask_login import login_user, logout_user, login_required
 from sqlalchemy.exc import SQLAlchemyError
 from itsdangerous import URLSafeSerializer, BadData
 
-from app.com import code
-from app.com.pretty import pretty_result
+from com import code
+from com.pretty import pretty_result
 from app.config import db, login_manager, simple_cache
-from app.src.models.user_info import User
+from app.auth_demo.models.user_info import User
 
+bp = Blueprint(name='user', import_name=__name__, url_prefix="/user")
 
-user = Blueprint('user', __name__)
 @login_manager.user_loader
 def load_user(token):
     key = current_app.config.get("SECRET_KEY")
@@ -57,7 +57,7 @@ def load_user(token):
 class UserAuth(object):
 
     @staticmethod
-    @user.route("/login", methods=["POST"])
+    @bp.route("/login", methods=["POST"])
     def login():
         """
             POST /user/login
@@ -97,7 +97,7 @@ class UserAuth(object):
                 return jsonify(pretty_result(code.AUTHORIZATION_ERROR, msg='密码错误.'))
 
     @staticmethod
-    @user.route("/register", methods=["POST"])
+    @bp.route("/register", methods=["POST"])
     def register():
         """
             POST /user/register
@@ -130,7 +130,7 @@ class UserAuth(object):
             return jsonify(pretty_result(code.OK))
 
     @staticmethod
-    @user.route("/updater/<int:uid>", methods=["POST"])
+    @bp.route("/updater/<int:uid>", methods=["POST"])
     @login_required
     def update_user(uid):
         """
@@ -170,7 +170,7 @@ class UserAuth(object):
             return jsonify(pretty_result(code.OK))
 
     @staticmethod
-    @user.route("/logout", methods=["GET"])
+    @bp.route("/logout", methods=["GET"])
     @login_required
     def logout():
         """
@@ -180,7 +180,7 @@ class UserAuth(object):
         return jsonify(pretty_result(code.OK))
 
     @staticmethod
-    @user.route('/test')
+    @bp.route('/test')
     @login_required
     def test():
         """
