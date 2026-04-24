@@ -2,13 +2,14 @@
 # -*- encoding: utf-8 -*-
 
 import logging
+
 # from multiprocessing import cpu_count
 
 from app import create_app
 from app.views import index
 
 APP = create_app()
-APP.add_url_rule('/', endpoint='index', view_func=index, methods=["GET"])
+APP.add_url_rule("/", endpoint="index", view_func=index, methods=["GET"])
 
 
 @APP.cli.command("serve")
@@ -17,7 +18,7 @@ def serve():
     生产模式启动命令函数
     To use: flask serve
     """
-    from utils.wsgi_server.gunicorn import StandaloneApplication
+    from app.utils.wsgi_server.gunicorn import StandaloneApplication
 
     # APP.logger.setLevel(APP.config.get('LOG_LEVEL', logging.INFO))
     # service_config = {
@@ -33,6 +34,7 @@ def serve():
     # StandaloneApplication(APP, service_config).run()
     StandaloneApplication(APP).run()
 
+
 if __name__ == "__main__":
     APP.logger.setLevel(logging.DEBUG)
-    APP.run(host='0.0.0.0', port=5000, debug=True)
+    APP.run(host="0.0.0.0", port=5000, debug=True)
